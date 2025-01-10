@@ -14,8 +14,8 @@ const userSchema = new Schema({
     profilePic:{
         type:String, 
         required:true,
-    }
-
+    },
+    
 });
 
 const UserModel = mongoose.model('users',userSchema);

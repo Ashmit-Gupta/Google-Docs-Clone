@@ -6,12 +6,10 @@ class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
 
   @override
-  Widget build(BuildContext context , WidgetRef ref) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       body: Center(
-        child: Text(
-          ref.watch(userProvider)?.email ?? "no email here !!"
-        ),
+        child: Text(ref.watch(userProvider)?.email ?? "no email here !!"),
       ),
     );
   }

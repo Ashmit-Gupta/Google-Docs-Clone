@@ -8,11 +8,10 @@ class LoginScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    ref.watch(authRepositoryProvider).signInWithGoogle();
+    final navigator = Navigator.of(context);
+    final sMessenger = ScaffoldMessenger.of(context);
 
     void signInWithGoogle(WidgetRef ref, BuildContext context) async {
-      final navigator = Navigator.of(context);
-      final sMessenger = ScaffoldMessenger.of(context);
       final errorModel =
           await ref.read(authRepositoryProvider).signInWithGoogle();
       if (errorModel.error == null) {
@@ -20,6 +19,7 @@ class LoginScreen extends ConsumerWidget {
         navigator
             .push(MaterialPageRoute(builder: (context) => const HomeScreen()));
       } else {
+        print("log error in the login screen , ${errorModel.error} ");
         sMessenger.showSnackBar(
           SnackBar(
             content: Text(errorModel.error!),
@@ -32,6 +32,7 @@ class LoginScreen extends ConsumerWidget {
         body: Center(
       child: ElevatedButton.icon(
         onPressed: () {
+          print("log in the onPress button !!");
           signInWithGoogle(ref, context);
         },
         label: Text(

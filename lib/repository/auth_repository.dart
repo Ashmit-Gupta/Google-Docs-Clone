@@ -29,23 +29,25 @@ class AuthRepository {
         final userAcc = UserModel(
             name: user.displayName!,
             email: user.email,
-            profilePic: user.photoUrl!,
+            profilePic: user.photoUrl ??
+                "https://icon-library.com/images/default-profile-icon/default-profile-icon-24.jpg",
             token: "",
             uid: "");
-        print('log the url is: $kHost/api/signup');
+
+        // uid: user.id);
+
         var res = await _client.post(Uri.parse('$kHost/api/signup'),
-            // body: userAcc.toJson(),
             body: jsonEncode(userAcc),
             headers: {'Content-Type': 'application/json;charset=UTF-8'});
 
-        print(
-            "log the response status code is : ${res.statusCode} and the data in the res is : ${res.body.toString()}");
         switch (res.statusCode) {
           case 200:
             final newUser = userAcc.copyWith(
               uid: jsonDecode(res.body)['user']['_id'],
-              // token: "",
+              token: jsonDecode(res.body)['token'],
             );
+            print("the token is : ${jsonDecode(res.body)['token']}");
+
             error = ErrorModel(error: null, data: newUser);
             break;
         }

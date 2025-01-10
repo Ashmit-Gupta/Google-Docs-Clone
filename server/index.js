@@ -5,7 +5,7 @@ const mongoose = require('mongoose');
 const authRouter = require('./routes/auth');
 const cors = require('cors');
 
-const PORT = process.env.PORT | 3000 | 3001;
+const PORT = process.env.PORT || 3000 || 3001;
 
 const app = express();
 
@@ -29,5 +29,4 @@ app.listen(PORT , "0.0.0.0" ,async ()=>{
     }catch(e){
         console.error("Error while runing the server : " , e.message);
     }
-
 });

@@ -2,13 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_docs_clone/repository/auth_repository.dart';
 import 'package:google_docs_clone/screens/home_screen.dart';
+import 'package:routemaster/routemaster.dart';
 
 class LoginScreen extends ConsumerWidget {
   const LoginScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final navigator = Navigator.of(context);
+    final navigator = Routemaster.of(context);
     final sMessenger = ScaffoldMessenger.of(context);
 
     void signInWithGoogle(WidgetRef ref, BuildContext context) async {
@@ -16,8 +17,7 @@ class LoginScreen extends ConsumerWidget {
           await ref.read(authRepositoryProvider).signInWithGoogle();
       if (errorModel.error == null) {
         ref.read(userProvider.notifier).update((state) => errorModel.data);
-        navigator
-            .push(MaterialPageRoute(builder: (context) => const HomeScreen()));
+        navigator.replace('/');
       } else {
         print("log error in the login screen , ${errorModel.error} ");
         sMessenger.showSnackBar(

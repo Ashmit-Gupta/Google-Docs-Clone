@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_docs_clone/repository/auth_repository.dart';
-import 'package:google_docs_clone/screens/home_screen.dart';
-import 'package:google_docs_clone/screens/login_screen.dart';
-
+import 'package:google_docs_clone/routes/router.dart';
+import 'package:routemaster/routemaster.dart';
 import 'models/error_model.dart';
 
 void main() {
@@ -26,17 +25,6 @@ class _MyAppState extends ConsumerState<MyApp> {
     getUserData();
   }
 
-  @override
-  Widget build(BuildContext context) {
-    final user = ref.watch(userProvider);
-
-    return MaterialApp(
-      title: "Google Docs Clone",
-      theme: ThemeData(primarySwatch: Colors.blue),
-      home: user == null ? const LoginScreen() : const HomeScreen(),
-    );
-  }
-
   void getUserData() async {
     errorModel = await ref.read(authRepositoryProvider).getUserData();
     if (errorModel != null && errorModel!.data != null) {
@@ -44,5 +32,22 @@ class _MyAppState extends ConsumerState<MyApp> {
     } else {
       print("log ${errorModel!.error}");
     }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp.router(
+      debugShowCheckedModeBanner: false,
+      title: "Google Docs Clone",
+      theme: ThemeData(primarySwatch: Colors.blue),
+      routerDelegate: RoutemasterDelegate(routesBuilder: (context) {
+        final user = ref.watch(userProvider);
+        if (user != null && user.token.isNotEmpty) {
+          return loggedInRoute;
+        }
+        return loggedOutRoute;
+      }),
+      routeInformationParser: const RoutemasterParser(),
+    );
   }
 }

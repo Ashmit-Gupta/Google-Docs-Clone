@@ -65,7 +65,7 @@ authRouter.post('/api/signup' , async (req , res)=>{
 
 });
 
-authRouter.get('/' , authMiddleware ,async (req , res)=>{
+authRouter.get('/api/me' , authMiddleware ,async (req , res)=>{
 
     try{    
         // const userInfo = await UserModel.find({

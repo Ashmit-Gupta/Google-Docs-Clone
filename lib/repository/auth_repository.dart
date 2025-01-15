@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:google_docs_clone/constants/constants.dart';
 import 'package:google_docs_clone/models/error_model.dart';
 import 'package:google_docs_clone/models/user_model_entity.dart';
-import 'package:google_docs_clone/repository/local_storage_repo.dart';
+import 'package:google_docs_clone/repository/local_storage_repository.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:http/http.dart';
 import 'package:riverpod/riverpod.dart';

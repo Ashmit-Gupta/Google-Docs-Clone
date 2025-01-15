@@ -2,8 +2,9 @@ require('dotenv').config();
 const express = require('express');
 const jwt = require('jsonwebtoken');
 const mongoose = require('mongoose');
-const authRouter = require('./routes/auth');
+const authRouter = require('./routes/auth_route');
 const cors = require('cors');
+const documentRouter = require('./routes/document_route');
 
 const PORT = process.env.PORT || 3000 || 3001;
 
@@ -11,7 +12,9 @@ const app = express();
 
 app.use(cors());
 app.use(express.json());
-app.use(authRouter);
+
+app.use(authRouter); //authentication Router 
+app.use(documentRouter);//creating a document router 
 
 app.listen(PORT , "0.0.0.0" ,async ()=>{
 

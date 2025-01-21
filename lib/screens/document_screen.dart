@@ -2,6 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart' as quill;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_docs_clone/constants/colors.dart';
+import 'package:google_docs_clone/models/document_model.dart';
+import 'package:google_docs_clone/repository/auth_repository.dart';
+import 'package:google_docs_clone/repository/document_repository.dart';
+
+import '../models/error_model.dart';
 
 class DocumentScreen extends ConsumerStatefulWidget {
   final String id;
@@ -17,11 +22,34 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
       TextEditingController(text: 'Untitled Document');
 
   final quill.QuillController _controller = quill.QuillController.basic();
+  ErrorModel? errorModel;
+
+  @override
+  void initState() {
+    super.initState();
+    fetchDocumentData();
+  }
+
+  void fetchDocumentData() async {
+    errorModel = await ref
+        .read(documentRepositoryProvider)
+        .getDocumentById(ref.read(userProvider)!.token, widget.id);
+
+    if (errorModel!.data != null) {
+      titleController.text = (errorModel!.data as DocumentModel).title;
+      setState(() {});
+    }
+  }
 
   @override
   void dispose() {
     super.dispose();
     titleController.dispose();
+  }
+
+  void updateTitle(WidgetRef ref, String title) {
+    ref.read(documentRepositoryProvider).updateDocumentTitle(
+        token: ref.read(userProvider)!.token, id: widget.id, title: title);
   }
 
   @override
@@ -69,26 +97,32 @@ class _DocumentScreenState extends ConsumerState<DocumentScreen> {
               SizedBox(
                 width: 180,
                 child: TextField(
-                    controller: titleController,
-                    decoration: const InputDecoration(
-                      border: InputBorder.none,
-                      focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: kBlueColor)),
-                      contentPadding: EdgeInsets.only(left: 10),
-                    )),
+                  controller: titleController,
+                  decoration: const InputDecoration(
+                    border: InputBorder.none,
+                    focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: kBlueColor)),
+                    contentPadding: EdgeInsets.only(left: 10),
+                  ),
+                  onSubmitted: (value) {
+                    updateTitle(ref, value);
+                  },
+                ),
               )
             ],
           ),
         ),
         bottom: PreferredSize(
-            preferredSize: const Size.fromHeight(1),
-            child: Container(
-              decoration: BoxDecoration(
-                  border: Border.all(
+          preferredSize: const Size.fromHeight(1),
+          child: Container(
+            decoration: BoxDecoration(
+              border: Border.all(
                 color: kGreyColor,
                 width: 0.1,
-              )),
-            )),
+              ),
+            ),
+          ),
+        ),
       ),
       body: Center(
         child: Column(

@@ -48,7 +48,7 @@ authRouter.post('/api/signup' , async (req , res)=>{
             //storing the data 
             user = await user.save();
         }
-        console.log("the user has signed up : " ,user);
+        // console.log("the user has signed up : " ,user);
 
         const token = jwt.sign({
             id : user._id,

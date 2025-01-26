@@ -82,12 +82,12 @@ class DocumentRepository {
       switch (response.statusCode) {
         case 200:
           List<DocumentModel> documentsList = [];
-
+          var decodedData = jsonDecode(response.body);
           for (int i = 0; i < jsonDecode(response.body).length; i++) {
-            // Logger().i("single data is : ${jsonDecode(response.body)[i]}");
             // documentsList.add(jsonDecode(response.body)[i]);
             documentsList
-                .add(DocumentModel.fromJson(jsonDecode(response.body)[i]));
+                // .add(DocumentModel.fromJson(jsonDecode(response.body)[i]));
+                .add(DocumentModel.fromJson(decodedData[i]));
           }
           error = ErrorModel(error: null, data: documentsList);
           break;

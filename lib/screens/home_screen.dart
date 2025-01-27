@@ -83,7 +83,7 @@ class HomeScreen extends ConsumerWidget {
               margin: const EdgeInsets.only(top: 10),
               width: 600,
               child: ListView.builder(
-                itemCount: snapshot.data!.data.length,
+                itemCount: snapshot.data!.data.length ?? 0,
                 itemBuilder: (context, index) {
                   DocumentModel document = snapshot.data!.data[index];
 

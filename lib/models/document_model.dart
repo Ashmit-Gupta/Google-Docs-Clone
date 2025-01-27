@@ -18,7 +18,8 @@ class DocumentModel {
         uid: json['uid'] as String? ?? '',
         createdAt: json['createdAt'] as String? ?? '',
         title: json['title'] as String? ?? 'Untitled',
-        content: List<String>.from(json['content'] ?? []),
+        // content: List<String>.from(json['content'] ?? []),
+        content: List<dynamic>.from(json['content'] ?? []),
         id: json['_id'] as String? ?? '',
         v: json['__v'] as int? ?? 0,
       );

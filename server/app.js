@@ -6,6 +6,8 @@ const authRouter = require('./routes/auth_route');
 const http = require('http');
 const cors = require('cors');
 const documentRouter = require('./routes/document_route');
+// const Document = require('../server/models/document_model');
+const Document = require('./models/document_model');
 
 const PORT = process.env.PORT || 3000 || 3001;
 
@@ -56,10 +58,7 @@ server.listen(PORT , "0.0.0.0" ,async ()=>{
             throw new Error('Missing DB_CONNECTION in environment variables');
         }
     
-        const connection = await mongoose.connect(process.env.DB_CONNECTION, {
-            // useNewUrlParser: true,
-            useUnifiedTopology: true,
-        });
+        const connection = await mongoose.connect(process.env.DB_CONNECTION);
     
         console.log('Connected to the Database Successfully');
     } catch (error) {

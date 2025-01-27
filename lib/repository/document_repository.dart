@@ -72,23 +72,37 @@ class DocumentRepository {
   }
 
   Future<ErrorModel> getDocuments(String token) async {
+    logger.i("the server is : $kHost/api/docs/me");
     ErrorModel error = ErrorModel(error: "Unexpected Error !!", data: null);
     try {
       var response = await _client.get(
         Uri.parse('$kHost/api/docs/me'),
         headers: {'token': token},
       );
+      logger.f("the token is $token");
+
+      logger.d(
+          "the runtime of content is : ${jsonDecode(response.body)[0]['content'].runtimeType}");
+      logger.d(
+          "the runtime of the response body is : ${(jsonDecode(response.body)[0]).runtimeType}");
 
       switch (response.statusCode) {
         case 200:
           List<DocumentModel> documentsList = [];
-          var decodedData = jsonDecode(response.body);
-          for (int i = 0; i < jsonDecode(response.body).length; i++) {
-            // documentsList.add(jsonDecode(response.body)[i]);
-            documentsList
-                // .add(DocumentModel.fromJson(jsonDecode(response.body)[i]));
-                .add(DocumentModel.fromJson(decodedData[i]));
+          // for (int i = 0; i < jsonDecode(response.body).length; i++) {
+          //   // documentsList.add(jsonDecode(response.body)[i]);
+          //   documentsList
+          //       .add(DocumentModel.fromJson(jsonDecode(response.body)[i]));
+          //
+          //   // .add(DocumentModel.fromJson(jsonDecode(decodedData[i])));
+          // }
+          List<dynamic> decodeData = jsonDecode(response.body);
+          logger.f(
+              "the type of decodeData is : ${jsonDecode(response.body).runtimeType}");
+          for (var document in decodeData) {
+            documentsList.add(DocumentModel.fromJson(document));
           }
+
           error = ErrorModel(error: null, data: documentsList);
           break;
         case 401:
@@ -103,8 +117,8 @@ class DocumentRepository {
         default:
           error = ErrorModel(error: response.body, data: null);
       }
-    } catch (e) {
-      logger.e("error message $e");
+    } catch (e, stackTrace) {
+      logger.e("error message $e and the error trace is : $stackTrace");
       error = ErrorModel(error: e.toString(), data: null);
     }
     return error;
